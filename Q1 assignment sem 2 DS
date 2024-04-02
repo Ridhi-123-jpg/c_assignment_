@@ -1,0 +1,191 @@
+Question:1
+(a)	Library Management System
+#include <stdio.h>
+#include <string.h>
+
+// Define structures for books and patrons
+struct Book {
+int bookId; char title[100];
+char author[100];
+};
+
+struct Patron { int patronId; char name[100];
+};
+
+// Global arrays to store books and patrons
+struct Book books[100]; struct Patron patrons[100]; int bookCount = 0;
+int patronCount = 0;
+
+// Function to add a new book
+void addBook() {
+printf("Enter book title: "); scanf("%s", books[bookCount].title); printf("Enter author: ");
+scanf("%s", books[bookCount].author); books[bookCount].bookId = bookCount + 1; bookCount++;
+printf("Book added successfully!\n");
+}
+
+// Function to display all books
+void displayBooks() {
+printf("Books in the library:\n"); for (int i = 0; i < bookCount; i++) {
+printf("%d. %s by %s\n", books[i].bookId, books[i].title, books[i].author);
+}
+}
+
+// Function to register a new patron
+void registerPatron() {
+printf("Enter patron name: ");
+scanf("%s", patrons[patronCount].name); patrons[patronCount].patronId = patronCount + 1; patronCount++;
+printf("Patron registered successfully!\n");
+}
+
+// Function to display all patrons
+ 
+void displayPatrons() {
+printf("Registered patrons:\n");
+for (int i = 0; i < patronCount; i++) {
+printf("%d. %s\n", patrons[i].patronId, patrons[i].name);
+}
+}
+
+int main() {
+int choice; while (1) {
+printf("\nLibrary Management System\n");
+printf("1. Add Book\n"); printf("2. Display Books\n"); printf("3. Register Patron\n"); printf("4. Display Patrons\n"); printf("5. Exit\n"); printf("Enter your choice: "); scanf("%d", &choice);
+
+switch (choice) { case 1:
+addBook(); break;
+case 2:
+displayBooks(); break;
+case 3:
+registerPatron(); break;
+case 4:
+displayPatrons(); break;
+case 5:
+printf("Exiting. Have a great day!\n"); return 0;
+default:
+printf("Invalid choice. Try again.\n");
+}
+}
+
+return 0;
+}
+
+
+
+(B)Student Grade tracker
+#include <stdio.h> #include <stdlib.h> #include <string.h>
+
+#define MAX_COURSES 100
+#define MAX_STUDENTS 100
+#define MAX_ASSIGNMENTS 100
+
+// Struct for assignment
+typedef struct { char name[50]; float score;
+} Assignment;
+
+// Struct for course
+typedef struct { char name[50];
+Assignment assignments[MAX_ASSIGNMENTS]; int assignmentCount;
+} Course;
+
+// Struct for student
+typedef struct { char name[50];
+float grades[MAX_ASSIGNMENTS]; float finalGrade;
+} Student;
+
+// Function prototypes
+void addCourse(Course courses[], int *courseCount); void addAssignment(Course *course);
+void registerStudent(Student students[], int *studentCount);
+void assignGrade(Course courses[], Student students[], int courseCount, int studentCount); void calculateFinalGrades(Student students[], int studentCount);
+void generateReport(Student students[], int studentCount);
+
+int main() {
+ 
+Course courses[MAX_COURSES]; Student students[MAX_STUDENTS]; int courseCount = 0;
+int studentCount = 0;
+
+int choice; do {
+printf("\nStudent Grade Tracker Menu:\n");
+printf("1. Add Course\n"); printf("2. Add Assignment\n"); printf("3. Register Student\n"); printf("4. Assign Grade\n");
+printf("5. Calculate Final Grades\n"); printf("6. Generate Report\n"); printf("7. Exit\n");
+printf("Enter your choice: ");
+scanf("%d", &choice);
+
+switch(choice) { case 1:
+addCourse(courses, &courseCount); break;
+case 2:
+addAssignment(&courses[courseCount - 1]); break;
+case 3:
+registerStudent(students, &studentCount); break;
+case 4:
+assignGrade(courses, students, courseCount, studentCount); break;
+case 5:
+calculateFinalGrades(students, studentCount); break;
+case 6:
+generateReport(students, studentCount); break;
+case 7:
+printf("Exiting...\n"); break;
+default:
+printf("Invalid choice. Please try again.\n");
+}
+} while(choice != 7);
+
+return 0;
+}
+
+void addCourse(Course courses[], int *courseCount) {
+printf("Enter course name: ");
+scanf("%s", courses[*courseCount].name); courses[*courseCount].assignmentCount = 0; (*courseCount)++;
+printf("Course added successfully.\n");
+ 
+}
+
+void addAssignment(Course *course) {
+if (course->assignmentCount < MAX_ASSIGNMENTS) {
+printf("Enter assignment name: ");
+scanf("%s", course->assignments[course->assignmentCount].name);
+printf("Enter assignment score: ");
+scanf("%f", &course->assignments[course->assignmentCount].score); (course->assignmentCount)++;
+printf("Assignment added successfully.\n");
+} else {
+printf("Maximum assignments reached for this course.\n");
+}
+}
+
+void registerStudent(Student students[], int *studentCount) {
+printf("Enter student name: "); scanf("%s", students[*studentCount].name); (*studentCount)++;
+printf("Student registered successfully.\n");
+}
+
+void assignGrade(Course courses[], Student students[], int courseCount, int studentCount) { char courseName[50];
+printf("Enter course name: ");
+scanf("%s", courseName);
+
+for (int i = 0; i < courseCount; i++) {
+if (strcmp(courses[i].name, courseName) == 0) { for (int j = 0; j < studentCount; j++) {
+printf("Enter grade for %s in %s: ", students[j].name, courseName);
+scanf("%f", &students[j].grades[i]);
+}
+printf("Grades assigned successfully for course: %s\n", courseName); return;
+}
+}
+printf("Course not found.\n");
+}
+
+void calculateFinalGrades(Student students[], int studentCount) { for (int i = 0; i < studentCount; i++) {
+float totalScore = 0; int count = 0;
+for (int j = 0; j < MAX_ASSIGNMENTS; j++) {
+if (students[i].grades[j] != 0) { totalScore += students[i].grades[j]; count++;
+}
+}
+students[i].finalGrade = count > 0 ? (totalScore / count) : 0;
+}
+printf("Final grades calculated successfully.\n");
+}
+ 
+
+void generateReport(Student students[], int studentCount) {
+printf("Student Report:\n");
+for (int i = 0; i < studentCount; i++) {
+printf("%s: %.2f\n", students[i].name, students[i].finalGrade);
+}
+}
